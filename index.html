@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link href="./index.css" rel="stylesheet">
+    <title>Knockoutjs practise</title>
+</head>
+<body>
+    <div id="knockout-app" class="card">
+    
+        <div class="card-section" style="display:none;" data-bind="visible: hasBeenSubmitted()">
+            <h2>Thank you for submitting the form!</h2>
+            <div data-bind="visible: usersArray().length > 0">
+                <h3>Current users</h3>
+                <ul class="user-list" data-bind="foreach: usersArray">
+                    <!-- inside this loop you'll have access to $data and $index of current item -->
+                    <li>
+                        <div>
+                            <div>
+                                <span data-bind="text: $data.firstName"></span>
+                                <span data-bind="text: $data.emailAddress"></span>
+                            </div>
+                            <!-- we're in the context of an iteration loop, anything we do here would refer to the item, so we need to access route/parent scope use $parent (call removeUser method on parent) -->
+                            <!-- also need to tell which one is being removed, one option is using an attribute, or could use a unique ID -->
+                            <button data-bind="click: $parent.removeUser, attr: {'item-index': $index}">
+                                &times;
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="card-section" data-bind="visible: !hasBeenSubmitted()">
+            <h2>Create Account</h2>
+            <p>Enter your name and email</p>
+            <form data-bind="submit: handleSubmit">
+                <div class="field">
+                    <label for="first-name">First Name*</label>
+                    <!-- value: firstName sets up a two way data bind -->
+                    <input data-bind="value: firstName, css: { error: firstName.error() && firstName.isModified() }" id="first-name" type="text"
+                    />
+                </div>
+                <div class="field">
+                    <label for="email">Email Address*</label>
+                    <input data-bind="value: emailAddress, css: { error: emailAddress.error() && emailAddress.isModified() }" placeholder="name@mail.com"
+                        id="email" type="text" />
+                </div>
+                <div class="field">
+                    <label for="subscription">Subscription Type</label>
+                    <div class="select-container">
+                        <select id="subscription" data-bind="value: subscriptionType">
+                            <option value="standard">Standard</option>
+                            <option value="pro">Pro</option>
+                            <option value="superPro">Super Pro</option>
+                        </select>
+                        <svg class="select_arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" width="30" viewBox="0 0 768 768">
+                            <path fill="#222" d="M223.5 319.5h321l-160.5 160.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <input type="submit" value="Continue" data-bind="enable: !firstName.error() && !emailAddress.error()">
+            </form>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+    <!-- addt methods for form validation -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/2.0.4/knockout.validation.min.js"></script>
+    <script type="text/javascript" src="./index.js"></script>
+</body>
+</html>
